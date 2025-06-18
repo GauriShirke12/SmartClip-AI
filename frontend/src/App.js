@@ -21,7 +21,7 @@ function App() {
     setSummary('');
 
     try {
-      const response = await axios.post('http://localhost:5000/summarize', { url });
+      const response = await axios.post('http://localhost:5000/api/summarize', { url });
       if (response.data.summary) {
         setSummary(response.data.summary);
       } else {
