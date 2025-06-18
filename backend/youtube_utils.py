@@ -1,56 +1,33 @@
-import re
-from youtube_transcript_api import (
-    YouTubeTranscriptApi,
-    TranscriptsDisabled,
-    NoTranscriptFound,
-    VideoUnavailable
-)
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.formatters import TextFormatter
+from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptAvailable, VideoUnavailable
+from googletrans import Translator  # Add this
 
-def extract_video_id(url):
-    """
-    Extracts the YouTube video ID from various YouTube URL formats.
-    """
-    if not url:
-        return None
-
-    # Match standard, short, embed, and shorts YouTube URLs
-    pattern = r"(?:https?://)?(?:www\.)?(?:youtube\.com/(?:watch\?v=|embed/|shorts/)|youtu\.be/)([^\s&?/]+)"
-    match = re.search(pattern, url)
-    if match:
-        return match.group(1)
-    return None
-
-
-def get_transcript(video_id):
-    """
-    Retrieves and concatenates the transcript for the given YouTube video ID.
-    Tries to get English first, then falls back to translation if available.
-    """
+def fetch_transcript(video_id):
     try:
-        # Try native English transcript
-        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
-        full_text = " ".join([entry["text"] for entry in transcript])
-        return full_text
+        # Get transcript list (includes all languages and auto-generated)
+        transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
 
-    except NoTranscriptFound:
+        # Try to get English first
         try:
-            # Try fallback and translate
-            transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-            fallback_transcript = transcript_list.find_transcript(['de', 'es', 'fr', 'it'])
+            transcript = transcript_list.find_transcript(['en'])
+        except:
+            # Else get ANY transcript (even auto-generated)
+            transcript = transcript_list.find_transcript(['hi', 'de', 'es', 'fr', 'auto'])
 
-            if fallback_transcript.is_translatable:
-                translated = fallback_transcript.translate('en').fetch()
-                full_text = " ".join([entry.text for entry in translated])  # ✅ FIXED LINE
-                return full_text
-            else:
-                return "Transcript not available: Transcript is not translatable to English."
+        # Fetch the transcript text
+        transcript_data = transcript.fetch()
 
-        except Exception as e:
-            return f"Transcript not available: {str(e)}"
+        # Join into plain text
+        text = " ".join([entry['text'] for entry in transcript_data])
 
-    except TranscriptsDisabled:
-        return "Transcript not available: Transcripts are disabled for this video."
-    except VideoUnavailable:
-        return "Transcript not available: The video is unavailable."
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
+        # Translate to English if not already
+        if transcript.language_code != 'en':
+            print(f"Translating from {transcript.language_code} to English...")
+            translator = Translator()
+            text = translator.translate(text, src=transcript.language_code, dest='en').text
+
+        return text
+
+    except (TranscriptsDisabled, NoTranscriptAvailable, VideoUnavailable) as e:
+        return f"Transcript not available: {str(e)}"
