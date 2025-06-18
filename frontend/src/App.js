@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import './index.css'; 
 
 function App() {
   const [url, setUrl] = useState('');
