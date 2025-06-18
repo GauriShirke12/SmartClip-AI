@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
+import './App.css';
 
 function App() {
   const [url, setUrl] = useState('');
@@ -35,103 +35,49 @@ function App() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(summary);
-    alert('Summary copied to clipboard!');
-  };
-
-  const appStyle = {
-    backgroundColor: darkMode ? '#121212' : '#f9f9f9',
-    color: darkMode ? '#ffffff' : '#121212',
-    minHeight: '100vh',
-    padding: '50px',
-    fontFamily: 'Arial, sans-serif',
-    transition: 'all 0.3s ease'
-  };
-
-  const inputStyle = {
-    padding: '10px',
-    width: '300px',
-    marginRight: '10px',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    background: darkMode ? '#1e1e1e' : '#fff',
-    color: darkMode ? '#fff' : '#000'
-  };
-
-  const buttonStyle = {
-    padding: '10px 16px',
-    borderRadius: '5px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    cursor: 'pointer'
+    alert('📋 Summary copied to clipboard!');
   };
 
   return (
-    <div style={appStyle}>
-      <div style={{ textAlign: 'center' }}>
-        <h1>YouTube Video Summarizer</h1>
-
-        <label style={{ display: 'block', marginBottom: '20px' }}>
+    <div className={`app-container ${darkMode ? '' : 'light-mode'}`}>
+      <div className="dark-mode-toggle">
+        <label>
           <input
             type="checkbox"
             checked={darkMode}
             onChange={() => setDarkMode(!darkMode)}
-          />{' '}
-          Dark Mode
+          />
+          {' '}Dark Mode
         </label>
+      </div>
 
+      <div className="header">
+        <h1>🎥 SmartClip AI</h1>
+        <p>YouTube Video Summarizer</p>
+      </div>
+
+      <div className="input-container">
         <input
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="Enter YouTube video URL"
-          style={inputStyle}
+          placeholder="Paste YouTube video link..."
         />
-        <button onClick={handleSummarize} style={buttonStyle}>
-          Summarize
-        </button>
-
-        {loading && <p style={{ marginTop: '20px' }}>⏳ Summarizing...</p>}
-
-        <AnimatePresence>
-          {error && (
-            <motion.p
-              key="error"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              style={{ color: 'red', marginTop: '20px' }}
-            >
-              {error}
-            </motion.p>
-          )}
-
-          {summary && (
-            <motion.div
-              key="summary"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              style={{
-                marginTop: '30px',
-                backgroundColor: darkMode ? '#1e1e1e' : '#fff',
-                padding: '20px',
-                borderRadius: '8px',
-                maxWidth: '600px',
-                marginLeft: 'auto',
-                marginRight: 'auto'
-              }}
-            >
-              <h3>📄 Summary:</h3>
-              <p>{summary}</p>
-              <button onClick={handleCopy} style={{ ...buttonStyle, marginTop: '10px' }}>
-                📋 Copy Summary
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <button onClick={handleSummarize}>Summarize</button>
       </div>
+
+      {loading && <p style={{ textAlign: 'center' }}>⏳ Summarizing...</p>}
+      {error && <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>}
+
+      {summary && (
+        <div className={`card ${darkMode ? '' : 'light'}`}>
+          <h3>📝 Summary:</h3>
+          <div className="summary">{summary}</div>
+          <button onClick={handleCopy} style={{ marginTop: '10px' }}>
+            📋 Copy Summary
+          </button>
+        </div>
+      )}
     </div>
   );
 }
