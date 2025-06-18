@@ -24,21 +24,27 @@ def extract_video_id(url):
 def get_transcript(video_id):
     """
     Retrieves and concatenates the transcript for the given YouTube video ID.
-    Tries to fetch both manual and auto-generated English transcripts.
-    Returns friendly error messages if transcript is unavailable.
+    Tries to get English first, then falls back to translation if available.
     """
     try:
-        # First try getting the default transcript
-        transcript = YouTubeTranscriptApi.get_transcript(video_id)
-        return " ".join([entry["text"] for entry in transcript])
+        # Try native English transcript
+        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+        full_text = " ".join([entry["text"] for entry in transcript])
+        return full_text
 
     except NoTranscriptFound:
         try:
-            # Try to find English auto-generated transcript
+            # Try fallback and translate
             transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-            transcript = transcript_list.find_transcript(['en'])
-            generated = transcript.fetch()
-            return " ".join([entry["text"] for entry in generated])
+            fallback_transcript = transcript_list.find_transcript(['de', 'es', 'fr', 'it'])
+
+            if fallback_transcript.is_translatable:
+                translated = fallback_transcript.translate('en').fetch()
+                full_text = " ".join([entry.text for entry in translated])  # ✅ FIXED LINE
+                return full_text
+            else:
+                return "Transcript not available: Transcript is not translatable to English."
+
         except Exception as e:
             return f"Transcript not available: {str(e)}"
 

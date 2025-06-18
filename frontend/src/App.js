@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import './App.css'; // Make sure this exists
+import './App.css';
 
 function App() {
   const [url, setUrl] = useState('');
@@ -74,46 +74,45 @@ function App() {
             <button onClick={handleSummarize}>Summarize</button>
           </div>
 
-          {loading && (
-  <p className="loading">⏳ Summarizing...</p>
-)}
+          {loading && <p className="loading">⏳ Summarizing...</p>}
 
-<AnimatePresence>
-  {error && (
-    <motion.div
-      key="error"
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.4 }}
-      className="error-message"
-    >
-      {error.includes("Transcript not available") ? (
-        <>❌ Sorry, this video doesn't have a transcript. Please try another one.</>
-      ) : (
-        <>{error}</>
-      )}
-    </motion.div>
-  )}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                key="error"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+                className="error-message"
+              >
+                {error.includes("Transcript not available") ? (
+                  <>❌ Sorry, this video doesn't have a transcript. Please try another one.</>
+                ) : (
+                  <>{error}</>
+                )}
+              </motion.div>
+            )}
 
-  {summary && (
-    <motion.div
-      key="summary"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="summary-box"
-    >
-      <h2>📝 Summary:</h2>
-      <div className="summary-text">{summary}</div>
-      <button onClick={handleCopy}>📋 Copy Summary</button>
-    </motion.div>
-  )}
-</AnimatePresence>
-
+            {summary && (
+              <motion.div
+                key="summary"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="summary-box"
+              >
+                <h2>📝 Summary:</h2>
+                <div className="summary-text">{summary}</div>
+                <button onClick={handleCopy}>📋 Copy Summary</button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
+
+      
     </div>
   );
 }
