@@ -24,16 +24,26 @@ def extract_video_id(url):
 def get_transcript(video_id):
     """
     Retrieves and concatenates the transcript for the given YouTube video ID.
-    Returns error messages if transcript is unavailable.
+    Tries to fetch both manual and auto-generated English transcripts.
+    Returns friendly error messages if transcript is unavailable.
     """
     try:
+        # First try getting the default transcript
         transcript = YouTubeTranscriptApi.get_transcript(video_id)
-        full_text = " ".join([entry["text"] for entry in transcript])
-        return full_text
+        return " ".join([entry["text"] for entry in transcript])
+
+    except NoTranscriptFound:
+        try:
+            # Try to find English auto-generated transcript
+            transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+            transcript = transcript_list.find_transcript(['en'])
+            generated = transcript.fetch()
+            return " ".join([entry["text"] for entry in generated])
+        except Exception as e:
+            return f"Transcript not available: {str(e)}"
+
     except TranscriptsDisabled:
         return "Transcript not available: Transcripts are disabled for this video."
-    except NoTranscriptFound:
-        return "Transcript not available: No transcript found for this video."
     except VideoUnavailable:
         return "Transcript not available: The video is unavailable."
     except Exception as e:
