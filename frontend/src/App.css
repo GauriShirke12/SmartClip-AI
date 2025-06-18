@@ -1,40 +1,132 @@
-.App {
-  text-align: center;
-  padding: 2rem;
-  font-family: Arial, sans-serif;
-}
-
-input {
-  padding: 0.5rem;
-  width: 60%;
-  max-width: 400px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
+/* Base styles */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
   color: white;
+}
+
+.app-container {
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #121212;
+  color: white;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.light-mode {
+  background-color: #f0f0f0;
+  color: #121212;
+}
+
+.dark-mode-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.dark-mode-toggle label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input Area */
+.input-container {
+  display: flex;
+  gap: 10px;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  animation: fadeIn 0.8s ease-in;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+/* Buttons */
+button {
+  padding: 12px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
   background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Card */
+.card {
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: #1f1f1f;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.5s ease;
+}
+
+.card.light {
+  background-color: #ffffff;
+  color: #000;
 }
 
 .summary {
-  margin-top: 2rem;
-  text-align: left;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  white-space: pre-line;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-top: 10px;
 }
 
-.error {
-  color: red;
-  margin-top: 1rem;
+/* Utility */
+.center-text {
+  text-align: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
