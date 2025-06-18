@@ -1,132 +1,139 @@
-/* Base styles */
+/* App.css */
+
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #121212;
-  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  transition: background-color 0.3s ease;
 }
 
-.app-container {
-  min-height: 100vh;
-  padding: 20px;
+.app.dark {
   background-color: #121212;
-  color: white;
-  transition: background-color 0.3s, color 0.3s;
+  color: #ffffff;
 }
 
-.light-mode {
-  background-color: #f0f0f0;
+.app.light {
+  background-color: #ffffff;
   color: #121212;
 }
 
-.dark-mode-toggle {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-}
-
-.dark-mode-toggle label {
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Header */
-.header {
-  text-align: center;
-  margin-bottom: 30px;
-  animation: slideDown 0.8s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Input Area */
-.input-container {
-  display: flex;
-  gap: 10px;
+.container {
   max-width: 600px;
   margin: 0 auto;
-  margin-bottom: 20px;
-  animation: fadeIn 0.8s ease-in;
+  padding: 40px 20px;
+  text-align: center;
 }
 
-input[type="text"] {
-  flex: 1;
-  padding: 12px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  outline: none;
-  transition: box-shadow 0.3s ease;
+.toggle {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
 }
 
-input[type="text"]:focus {
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-/* Buttons */
-button {
-  padding: 12px 20px;
-  background-color: #007bff;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+.subtitle {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #888;
 }
 
-button:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-}
-
-/* Card */
 .card {
-  max-width: 600px;
-  margin: 20px auto;
-  background-color: #1f1f1f;
+  background-color: #1e1e1e;
+  padding: 24px;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  animation: fadeIn 0.5s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
 }
 
-.card.light {
-  background-color: #ffffff;
-  color: #000;
+.app.light .card {
+  background-color: #fefefe;
 }
 
-.summary {
-  white-space: pre-line;
-  font-size: 15px;
-  line-height: 1.5;
+.input-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.input-group button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.input-group button:hover {
+  background-color: #0056b3;
+}
+
+.loading {
+  font-size: 14px;
+  color: #00bfff;
   margin-top: 10px;
 }
 
-/* Utility */
-.center-text {
+.error-message {
+  background-color: #ffe6e6;
+  color: #cc0000;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-top: 12px;
   text-align: center;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.summary-box {
+  background-color: #2e2e2e;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+  text-align: left;
+  transition: all 0.3s ease-in-out;
+}
+
+.app.light .summary-box {
+  background-color: #f5f5f5;
+}
+
+.summary-box h2 {
+  margin-bottom: 12px;
+}
+
+.summary-text {
+  white-space: pre-line;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.summary-box button {
+  padding: 10px 16px;
+  background-color: #28a745;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.summary-box button:hover {
+  background-color: #218838;
 }

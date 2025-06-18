@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './App.css';
+import { motion, AnimatePresence } from 'framer-motion';
+import './App.css'; // Make sure this exists
 
 function App() {
   const [url, setUrl] = useState('');
@@ -39,45 +40,80 @@ function App() {
   };
 
   return (
-    <div className={`app-container ${darkMode ? '' : 'light-mode'}`}>
-      <div className="dark-mode-toggle">
+    <div className={`app ${darkMode ? 'dark' : 'light'}`}>
+      <div className="toggle">
         <label>
           <input
             type="checkbox"
             checked={darkMode}
             onChange={() => setDarkMode(!darkMode)}
           />
-          {' '}Dark Mode
+          Dark Mode
         </label>
       </div>
 
-      <div className="header">
-        <h1>🎥 SmartClip AI</h1>
-        <p>YouTube Video Summarizer</p>
-      </div>
+      <div className="container">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="title"
+        >
+          🎥 SmartClip AI
+          <div className="subtitle">YouTube Video Summarizer</div>
+        </motion.h1>
 
-      <div className="input-container">
-        <input
-          type="text"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="Paste YouTube video link..."
-        />
-        <button onClick={handleSummarize}>Summarize</button>
-      </div>
+        <div className="card">
+          <div className="input-group">
+            <input
+              type="text"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="Paste YouTube video link..."
+            />
+            <button onClick={handleSummarize}>Summarize</button>
+          </div>
 
-      {loading && <p style={{ textAlign: 'center' }}>⏳ Summarizing...</p>}
-      {error && <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>}
+          {loading && (
+  <p className="loading">⏳ Summarizing...</p>
+)}
 
-      {summary && (
-        <div className={`card ${darkMode ? '' : 'light'}`}>
-          <h3>📝 Summary:</h3>
-          <div className="summary">{summary}</div>
-          <button onClick={handleCopy} style={{ marginTop: '10px' }}>
-            📋 Copy Summary
-          </button>
-        </div>
+<AnimatePresence>
+  {error && (
+    <motion.div
+      key="error"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.4 }}
+      className="error-message"
+    >
+      {error.includes("Transcript not available") ? (
+        <>❌ Sorry, this video doesn't have a transcript. Please try another one.</>
+      ) : (
+        <>{error}</>
       )}
+    </motion.div>
+  )}
+
+  {summary && (
+    <motion.div
+      key="summary"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="summary-box"
+    >
+      <h2>📝 Summary:</h2>
+      <div className="summary-text">{summary}</div>
+      <button onClick={handleCopy}>📋 Copy Summary</button>
+    </motion.div>
+  )}
+</AnimatePresence>
+
+        </div>
+      </div>
     </div>
   );
 }
