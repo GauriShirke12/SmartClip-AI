@@ -23,6 +23,11 @@ def summarize():
 
     try:
         transcript = get_transcript(video_id)
+
+        # 🔥 Check if transcript is actually valid
+        if "Transcript not available" in transcript or "An error occurred" in transcript:
+            return jsonify({"error": transcript}), 400
+
         cleaned_transcript = clean_transcript(transcript)
         raw_summary = summarize_text(cleaned_transcript)
         bullet_points = [f"• {line.strip()}" for line in raw_summary.split('.') if line.strip()]
@@ -31,6 +36,7 @@ def summarize():
         return jsonify({"summary": summary})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
