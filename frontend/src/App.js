@@ -35,65 +35,75 @@ function App() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(summary);
-    alert('📋 Summary copied to clipboard!');
+    alert('Summary copied to clipboard!');
   };
 
-  const appTheme = darkMode ? 'dark' : 'light';
+  const appStyle = {
+    backgroundColor: darkMode ? '#121212' : '#f9f9f9',
+    color: darkMode ? '#ffffff' : '#121212',
+    minHeight: '100vh',
+    padding: '50px',
+    fontFamily: 'Arial, sans-serif',
+    transition: 'all 0.3s ease'
+  };
+
+  const inputStyle = {
+    padding: '10px',
+    width: '300px',
+    marginRight: '10px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    background: darkMode ? '#1e1e1e' : '#fff',
+    color: darkMode ? '#fff' : '#000'
+  };
+
+  const buttonStyle = {
+    padding: '10px 16px',
+    borderRadius: '5px',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer'
+  };
 
   return (
-    <div className={`${appTheme} min-h-screen transition-all duration-300 bg-gray-900 text-white p-6`}>
-      <div className="max-w-2xl mx-auto space-y-6">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl font-bold text-center"
-        >
-          🎥 SmartClip AI – YouTube Summarizer
-        </motion.h1>
+    <div style={appStyle}>
+      <div style={{ textAlign: 'center' }}>
+        <h1>YouTube Video Summarizer</h1>
 
-        <div className="flex justify-center items-center gap-4">
+        <label style={{ display: 'block', marginBottom: '20px' }}>
           <input
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="Paste YouTube video link..."
-            className="flex-1 p-3 rounded-md text-black"
-          />
-          <button
-            onClick={handleSummarize}
-            className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-md text-white transition"
-          >
-            Summarize
-          </button>
-        </div>
+            type="checkbox"
+            checked={darkMode}
+            onChange={() => setDarkMode(!darkMode)}
+          />{' '}
+          Dark Mode
+        </label>
 
-        <div className="flex justify-center">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
-            />
-            <span className="text-sm">Dark Mode</span>
-          </label>
-        </div>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Enter YouTube video URL"
+          style={inputStyle}
+        />
+        <button onClick={handleSummarize} style={buttonStyle}>
+          Summarize
+        </button>
 
-        {loading && (
-          <p className="text-center animate-pulse text-blue-400">⏳ Summarizing...</p>
-        )}
+        {loading && <p style={{ marginTop: '20px' }}>⏳ Summarizing...</p>}
 
         <AnimatePresence>
           {error && (
-            <motion.div
+            <motion.p
               key="error"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-red-500 text-center"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              style={{ color: 'red', marginTop: '20px' }}
             >
               {error}
-            </motion.div>
+            </motion.p>
           )}
 
           {summary && (
@@ -102,15 +112,20 @@ function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-gray-800 p-5 rounded-lg shadow-lg space-y-4"
+              transition={{ duration: 0.4 }}
+              style={{
+                marginTop: '30px',
+                backgroundColor: darkMode ? '#1e1e1e' : '#fff',
+                padding: '20px',
+                borderRadius: '8px',
+                maxWidth: '600px',
+                marginLeft: 'auto',
+                marginRight: 'auto'
+              }}
             >
-              <h2 className="text-xl font-semibold">📝 Summary:</h2>
-              <div className="whitespace-pre-line text-sm leading-relaxed">{summary}</div>
-              <button
-                onClick={handleCopy}
-                className="mt-3 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
-              >
+              <h3>📄 Summary:</h3>
+              <p>{summary}</p>
+              <button onClick={handleCopy} style={{ ...buttonStyle, marginTop: '10px' }}>
                 📋 Copy Summary
               </button>
             </motion.div>
